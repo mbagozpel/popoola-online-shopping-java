@@ -11,6 +11,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -38,10 +40,10 @@ public class User implements Serializable {
     @NotEmpty
     private String address;
 
-    @NotNull
-    private boolean active;
 
-    @NotEmpty
+    private boolean active = true;
+
+
     private String role = "CUSTOMER";
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -51,6 +53,10 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Wishlists wishlists;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Chats chats;
 
     public Long getUserId() {
         return userId;
@@ -100,6 +106,14 @@ public class User implements Serializable {
         this.address = address;
     }
 
+    public Chats getChats() {
+        return chats;
+    }
+
+    public void setChats(Chats chats) {
+        this.chats = chats;
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -124,7 +138,8 @@ public class User implements Serializable {
         this.cart = cart;
     }
 
-    public Wishlists getWishlists() {
+    public Wishlists
+    getWishlists() {
         return wishlists;
     }
 
@@ -138,13 +153,14 @@ public class User implements Serializable {
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", active=" + active +
                 ", role='" + role + '\'' +
                 ", cart=" + cart +
                 ", wishlists=" + wishlists +
+                ", chats=" + chats +
                 '}';
     }
 }

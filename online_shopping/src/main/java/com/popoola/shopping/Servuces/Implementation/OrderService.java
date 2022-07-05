@@ -3,14 +3,9 @@ package com.popoola.shopping.Servuces.Implementation;
 import com.popoola.shopping.Enums.OrderStatusEnum;
 import com.popoola.shopping.Enums.ResponseEnum;
 import com.popoola.shopping.Exceptions.ShoppingException;
+import com.popoola.shopping.Models.*;
 import com.popoola.shopping.Models.Orders;
-import com.popoola.shopping.Models.OrderedProducts;
-import com.popoola.shopping.Models.Orders;
-import com.popoola.shopping.Models.Product;
-import com.popoola.shopping.Repos.OrderRepo;
-import com.popoola.shopping.Repos.OrderedProductsRepo;
-import com.popoola.shopping.Repos.ProductRepo;
-import com.popoola.shopping.Repos.UserRepo;
+import com.popoola.shopping.Repos.*;
 import com.popoola.shopping.Servuces.Interfaces.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 public class OrderService implements IOrderService {
@@ -28,6 +25,9 @@ public class OrderService implements IOrderService {
     UserRepo userRepo;
     @Autowired
     ProductRepo productRepo;
+
+    @Autowired
+    ReportRepo reportRepo;
     @Autowired
     ProductService productService;
     @Autowired
@@ -94,6 +94,16 @@ public class OrderService implements IOrderService {
 
         order.setOrderStatus(OrderStatusEnum.Finished.getCode());
         orderRepo.save(order);
+
+        Report report = new Report();
+
+        for (OrderedProducts prod: order.getProducts()
+             ) {
+            report.getOrdersList().add(prod);
+        }
+
+        report.setCreated(LocalDateTime.now());
+        reportRepo.save(report);
 
         return orderRepo.findByOrderId(orderId);
     }

@@ -4,10 +4,12 @@ import com.popoola.shopping.Enums.ResponseEnum;
 import com.popoola.shopping.Exceptions.ShoppingException;
 import com.popoola.shopping.Exceptions.ShoppingNotFound;
 import com.popoola.shopping.Models.Cart;
+import com.popoola.shopping.Models.Chats;
 import com.popoola.shopping.Models.DTOs.UpdateDTO;
 import com.popoola.shopping.Models.User;
 import com.popoola.shopping.Models.Wishlists;
 import com.popoola.shopping.Repos.CartRepo;
+import com.popoola.shopping.Repos.ChatRepo;
 import com.popoola.shopping.Repos.UserRepo;
 import com.popoola.shopping.Repos.WishListRepo;
 import com.popoola.shopping.Servuces.Interfaces.IUserService;
@@ -36,6 +38,9 @@ public class UserService implements IUserService, UserDetailsService{
     CartRepo cartRepo;
 
     @Autowired
+    ChatRepo chatRepo;
+
+    @Autowired
     WishListRepo wishListRepo;
 
     @Override
@@ -62,6 +67,10 @@ public class UserService implements IUserService, UserDetailsService{
             // Initial Cart
             Cart savedCart = cartRepo.save(new Cart(savedUser));
             savedUser.setCart(savedCart);
+
+            // Initial Message
+            Chats savedChat = chatRepo.save(new Chats(savedUser));
+            savedUser.setChats(savedChat);
 
             // Initial Wishlist
             Wishlists savedWishlist = wishListRepo.save(new Wishlists(savedUser));

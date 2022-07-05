@@ -3,6 +3,8 @@ package com.popoola.shopping.Enums;
 
 public enum ResponseEnum {
     PARAM_ERROR(1, "Parameter Error!"),
+
+    CHAT_DOES_NOT_EXIST(10, "Chat does not exist"),
     PRODUCT_DOES_NOT_EXIST(10, "Product does not exist!"),
     PRODUCT_OUT_OF_STOCK(11, "Not enough products in stock!"),
     PRODUCT_STATUS_ERROR(12, "Status is incorrect!"),

@@ -84,7 +84,7 @@ public class CartController {
         return ResponseEntity.ok(null);
     }
 
-    @DeleteMapping("/delete-cart{itemId}")
+    @PostMapping("/delete-cart/{itemId}")
     public void deleteItem(@PathVariable("itemId") Long itemId, Principal principal) {
         User user = userService.findByEmail(principal.getName());
         cartService.delete(itemId, user);
