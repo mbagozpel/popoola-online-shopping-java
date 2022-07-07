@@ -1,10 +1,15 @@
 package com.popoola.shopping.Controllers;
 import com.popoola.shopping.Models.DTOs.UpdateChatDTO;
+import com.popoola.shopping.Models.Message;
 import com.popoola.shopping.Models.User;
 import com.popoola.shopping.Servuces.Implementation.ChatService;
 import com.popoola.shopping.Servuces.Implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +19,9 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
+
+    @Autowired
+    private SimpMessagingTemplate simpleMessagingTemplate;
 
     @Autowired
     ChatService chatService;
@@ -55,6 +63,19 @@ public class ChatController {
     @GetMapping("/get-chats")
     public ResponseEntity<Object> getChats(){
         return ResponseEntity.ok(chatService.findAll());
+    }
+
+    @MessageMapping("/message") // /app/message
+    @SendTo("/chatroom/public")
+    private Message receivePublicMessage(@Payload Message message){
+        return message;
+    }
+
+    @MessageMapping("/private-message")
+    public Message receivePrivateMessage(@Payload Message message){
+
+        simpleMessagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message); // /user/{username}/private
+        return message;
     }
 
 
