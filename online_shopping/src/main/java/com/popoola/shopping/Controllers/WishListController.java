@@ -47,4 +47,11 @@ public class WishListController {
 
         return ResponseEntity.ok(wishListService.getWishlist(user));
     }
+
+    @PostMapping("/delete-wishlist/{productId}")
+    public void deleteItem(@PathVariable("productId") Long productId, Principal principal) {
+        User user = userService.findByEmail(principal.getName());
+        wishListService.delete(productId, user);
+    }
+
 }

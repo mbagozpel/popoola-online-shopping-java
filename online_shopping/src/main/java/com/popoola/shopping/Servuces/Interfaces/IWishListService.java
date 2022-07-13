@@ -10,5 +10,5 @@ import java.util.Collection;
 public interface IWishListService {
     Wishlists getWishlist(User user);
     void addToWishlist(Product product, User user);
-    void delete(String productId, User user);
+    void delete(Long productId , User user);
 }

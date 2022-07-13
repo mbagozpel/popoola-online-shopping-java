@@ -43,16 +43,19 @@ public class WishListService implements IWishListService {
         wishListRepo.save(wishlists);
     }
 
+
+
     @Override
     @Transactional
-    public void delete(String productId, User user) {
-        if(productId.equals("") || user == null) {
-            throw new ShoppingException(ResponseEnum.ORDER_STATUS_ERROR);
+    public void delete(Long productId, User user) {
+        if(productId == null || user == null) {
+            throw new ShoppingException(ResponseEnum.PRODUCT_STATUS_ERROR);
         }
 
     var product = user.getWishlists().getProducts().stream().filter(x -> productId.equals(x.getProductId())).findFirst();
     product.ifPresent(prod -> {
-        wishListRepo.deleteById(Math.toIntExact(prod.getProductId()));
+        user.getWishlists().getProducts().remove(prod);
+//        wishListRepo.deleteById(Math.toIntExact(prod.getProductId()));
 
     });
     }}

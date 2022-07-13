@@ -10,14 +10,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@CrossOrigin
-@RestController
-@RequestMapping("/chat")
+//@CrossOrigin("http:localhost:3000")
+@Controller
+//@RequestMapping("/chat")
 public class ChatController {
 
     @Autowired

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -83,6 +84,8 @@ public class SecurityConfiguration {
                     .antMatchers("/order/**").authenticated()
                     .antMatchers("/product/add-product/**").access("hasAnyAuthority('STAFF','CEO', 'CUSTOMER')")
                     .antMatchers("/product/get-products").authenticated()
+                    .antMatchers("/ws/**", "/ws/info?t=").permitAll()
+                    .antMatchers(HttpMethod.OPTIONS).permitAll()
                     .anyRequest().permitAll()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(accessDenyHandler)
